@@ -1,77 +1,70 @@
 import { Component, Vehicle, ServiceIssue } from '../types';
-import { initialComponents, initialVehicles, initialServiceIssues } from './mockData';
 
-// Initialize local storage with mock data if empty
-const initializeLocalStorage = () => {
-  if (!localStorage.getItem('components')) {
-    localStorage.setItem('components', JSON.stringify(initialComponents));
+const API_BASE_URL = 'http://127.0.0.1:8000/api';
+
+const handleResponse = async (response: Response) => {
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ message: 'An error occurred' }));
+    throw new Error(error.message || 'An error occurred');
   }
-  if (!localStorage.getItem('vehicles')) {
-    localStorage.setItem('vehicles', JSON.stringify(initialVehicles));
-  }
-  if (!localStorage.getItem('serviceIssues')) {
-    localStorage.setItem('serviceIssues', JSON.stringify(initialServiceIssues));
-  }
+  return response.json();
 };
-
-initializeLocalStorage();
-
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export const api = {
   // Vehicles
-  async getVehicles(): Promise<Vehicle[]> {
-    await delay(500); // Simulate network delay
-    const vehicles = localStorage.getItem('vehicles');
-    return JSON.parse(vehicles || '[]');
+  async getVehicles() {
+    const response = await fetch(`${API_BASE_URL}/vehicles/`);
+    return handleResponse(response);
   },
 
-  async createVehicle(vehicle: Omit<Vehicle, 'id'>): Promise<Vehicle> {
-    await delay(500);
-    const vehicles = await this.getVehicles();
-    const newVehicle = { ...vehicle, id: crypto.randomUUID() };
-    localStorage.setItem('vehicles', JSON.stringify([...vehicles, newVehicle]));
-    return newVehicle;
+  async createVehicle(vehicle: Omit<Vehicle, 'id'>) {
+    const response = await fetch(`${API_BASE_URL}/vehicles/create/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(vehicle),
+    });
+    return handleResponse(response);
   },
 
   // Components
-  async getComponents(): Promise<Component[]> {
-    await delay(500);
-    const components = localStorage.getItem('components');
-    return JSON.parse(components || '[]');
+  async getComponents() {
+    const response = await fetch(`${API_BASE_URL}/components/`);
+    return handleResponse(response);
   },
 
-  async createComponent(component: Omit<Component, 'id'>): Promise<Component> {
-    await delay(500);
-    const components = await this.getComponents();
-    const newComponent = { ...component, id: crypto.randomUUID() };
-    localStorage.setItem('components', JSON.stringify([...components, newComponent]));
-    return newComponent;
+  async createComponent(component: Omit<Component, 'id'>) {
+    const response = await fetch(`${API_BASE_URL}/components/create/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(component),
+    });
+    return handleResponse(response);
   },
 
   // Service Issues
-  async getServiceIssues(): Promise<ServiceIssue[]> {
-    await delay(500);
-    const issues = localStorage.getItem('serviceIssues');
-    return JSON.parse(issues || '[]');
+  async getServiceIssues() {
+    const response = await fetch(`${API_BASE_URL}/service-issues/`);
+    return handleResponse(response);
   },
 
-  async createServiceIssue(issue: Omit<ServiceIssue, 'id'>): Promise<ServiceIssue> {
-    await delay(500);
-    const issues = await this.getServiceIssues();
-    const newIssue = { ...issue, id: crypto.randomUUID() };
-    localStorage.setItem('serviceIssues', JSON.stringify([...issues, newIssue]));
-    return newIssue;
+  async createServiceIssue(issue: Omit<ServiceIssue, 'id'>) {
+    const response = await fetch(`${API_BASE_URL}/service-issues/create/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(issue),
+    });
+    return handleResponse(response);
   },
 
   // Analytics
   async getAnalyticsData() {
-    await delay(500);
-    const issues = await this.getServiceIssues();
-    return {
-      totalRevenue: issues.reduce((sum, issue) => sum + issue.cost, 0),
-      completedServices: issues.filter(issue => issue.status === 'completed').length,
-      pendingServices: issues.filter(issue => issue.status === 'pending').length,
-    };
+    const response = await fetch(`${API_BASE_URL}/analytics/data/`);
+    return handleResponse(response);
   },
 };
