@@ -34,40 +34,49 @@ The **Delivery Management System** backend is built with **Django**, providing A
 - **Revenue Analytics**: View daily, monthly, and yearly revenue trends for service operations.
 - **Admin Panel**: Manage all models directly via the Django admin interface.
 
-## Models
 
-### 1. **Vehicle**
-Represents vehicles in the system.
-**Fields**:
-- `id`: Auto-increment primary key.
-- `name`: Name of the vehicle (e.g., "Car A").
-- `type`: Type of the vehicle (e.g., "SUV").
+### Views Overview
 
-### 2. **ServiceIssue**
-Tracks service-related issues for vehicles.
-**Fields**:
-- `id`: Auto-increment primary key.
-- `vehicle`: ForeignKey to the `Vehicle` model.
-- `issue`: Brief title/description of the issue.
-- `description`: Detailed description of the issue.
-- `cost`: Cost of resolving the issue.
-- `created_at`: Timestamp when the issue was reported.
+The following views handle the creation and retrieval of vehicles, components, service issues, and analytics data:
 
-## Revenue Analytics
+- **Vehicle Views**:
+  - `create_vehicle`: Creates a new vehicle.
+  - `get_vehicles`: Retrieves a list of all vehicles.
 
-Three API endpoints provide graphical data for revenue analysis:
+- **Component Views**:
+  - `create_component`: Creates a new component.
+  - `get_components`: Retrieves a list of all components.
 
-1. **Daily Revenue** (Last 7 Days):
-   Endpoint: `/analytics/daily/`
-   Data: Revenue grouped by day for the past week.
+- **Service Issue Views**:
+  - `create_service_issue`: Creates a new service issue (repair or replacement).
+  - `get_service_issues`: Retrieves a list of all service issues.
 
-2. **Monthly Revenue** (Last 12 Months):
-   Endpoint: `/analytics/monthly/`
-   Data: Revenue grouped by month for the past year.
+- **Analytics Data View**:
+  - `analytics_data`: Provides daily, monthly, and yearly revenue data based on service issues.
 
-3. **Yearly Revenue** (Last 3 Years):
-   Endpoint: `/analytics/yearly/`
-   Data: Revenue grouped by year for the past three years.
+### URL Configuration (`urls.py`)
+
+The following URLs are defined for the endpoints in the project:
+
+- **Vehicle Endpoints**:
+  - `GET /vehicles/`: Retrieves all vehicles (`get_vehicles`).
+  - `POST /vehicles/create/`: Creates a new vehicle (`create_vehicle`).
+
+- **Component Endpoints**:
+  - `GET /components/`: Retrieves all components (`get_components`).
+  - `POST /components/create/`: Creates a new component (`create_component`).
+
+- **Service Issues Endpoints**:
+  - `GET /service-issues/`: Retrieves all service issues (`get_service_issues`).
+  - `POST /service-issues/create/`: Creates a new service issue (`create_service_issue`).
+
+- **Analytics Endpoint**:
+  - `GET /analytics/data/`: Provides analytics data (`analytics_data`).
+
+### Conclusion
+
+This backend service includes essential endpoints for managing vehicles, components, and service issues, as well as an analytics endpoint for tracking revenue. The URL configuration ensures easy routing of requests to the corresponding views for each resource.
+
 
 ## Setup Instructions
 
@@ -128,6 +137,7 @@ backend/
 │   ├── tests.py           # Unit tests
 
 ├── manage.py              # Django entry point
+
 
 
 ## API Endpoints
