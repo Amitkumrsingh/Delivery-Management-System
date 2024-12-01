@@ -34,6 +34,43 @@ The **Delivery Management System** backend is built with **Django**, providing A
 - **Revenue Analytics**: View daily, monthly, and yearly revenue trends for service operations.
 - **Admin Panel**: Manage all models directly via the Django admin interface.
 
+### Models Overview
+
+The following models are defined in the `models.py` file, representing the core entities in the system: `Vehicle`, `Component`, and `ServiceIssue`.
+
+- **Vehicle Model**:
+  The `Vehicle` model represents a vehicle in the system, including details like the make, model, year, license plate, and the owner's information. Each vehicle has a unique license plate and stores the owner's contact details.
+
+  Key fields:
+  - `make`: The make/brand of the vehicle (e.g., Toyota, Ford).
+  - `model`: The model of the vehicle (e.g., Corolla, Mustang).
+  - `year`: The year of manufacture.
+  - `license_plate`: A unique identifier for the vehicle.
+  - `owner_name`: The name of the vehicle owner.
+  - `owner_contact`: The contact information of the vehicle owner.
+
+- **Component Model**:
+  The `Component` model represents a component used in the maintenance and repair of vehicles. It includes the component's name, its repair and new prices, and the stock available for each component.
+
+  Key fields:
+  - `name`: The name of the component (e.g., Engine, Brake Pad).
+  - `repair_price`: The cost of repairing the component.
+  - `new_price`: The price of the component when purchased new.
+  - `stock`: The number of units of the component in stock.
+
+- **ServiceIssue Model**:
+  The `ServiceIssue` model represents an issue reported for a vehicle, which can either involve repairing or replacing a component. It records the associated vehicle, the component involved (if any), a description of the issue, the cost, and the date when the service issue was created.
+
+  Key fields:
+  - `vehicle`: A foreign key linking to the `Vehicle` model, representing the vehicle that the service issue is associated with.
+  - `component`: A foreign key linking to the `Component` model, representing the component involved in the service issue (optional).
+  - `is_repair`: A boolean indicating whether the issue is related to a repair (`True`) or replacement (`False`).
+  - `description`: A textual description of the service issue.
+  - `cost`: The cost associated with the service issue (repair or replacement).
+  - `created_at`: The date and time when the service issue was created.
+
+These models represent the key data entities in the system, allowing for vehicle and component management, as well as tracking service issues and their costs.
+
 
 ### Views Overview
 
@@ -140,20 +177,7 @@ backend/
 
 
 
-## API Endpoints
 
-•⁠  ⁠*Vehicles*
-  - ⁠ GET /vehicles/ ⁠: Retrieve all vehicles.
-  - ⁠ POST /vehicles/ ⁠: Add a new vehicle.
-
-•⁠  ⁠*Service Issues*
-  - ⁠ GET /service-issues/ ⁠: Retrieve all service issues.
-  - ⁠ POST /service-issues/ ⁠: Add a new service issue.
-
-•⁠  ⁠*Analytics*
-  - ⁠ GET /analytics/daily/ ⁠: Daily revenue.
-  - ⁠ GET /analytics/monthly/ ⁠: Monthly revenue.
-  - ⁠ GET /analytics/yearly/ ⁠: Yearly revenue.
 
 ## Technologies Used
 
